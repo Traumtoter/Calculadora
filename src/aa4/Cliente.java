@@ -16,12 +16,19 @@ import javax.swing.JOptionPane;
  */
 public class Cliente {
     public static void main(String[] args){
-        Scanner sc = new Scanner (System.in);
+       
+        String Ip = new String();
+        JOptionPane.showMessageDialog(null,"****Arrancando el servidor****\n");
+        Ip =  JOptionPane.showInputDialog("Igrese lA DIRECCION IP DE SU SERVIDOR\n");
+        
+   
         try{
-            Registry miRegistro = LocateRegistry.getRegistry("localhost", 1099);
-            Claculadora c = (Claculadora)Naming.lookup("//localhost/Claculadora");
             
-            while (true){
+            Registry miRegistro = LocateRegistry.getRegistry(Ip, 1099);
+
+            Claculadora c = (Claculadora) Naming.lookup("//"+Ip+"/Claculadora");
+            boolean Seguir = true;
+            while (Seguir){
                String menu = JOptionPane.showInputDialog("Calculadora de Prueba RMI\n"
                        + "Suma...[1]\n"
                        + "Resta..[2]\n"
@@ -30,32 +37,85 @@ public class Cliente {
                        + "Cancelar para salir");
                switch(menu){
                    case "1":{
-                       int x = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el primer numero"));
-                       int y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el segundo numero"));
-                                JOptionPane.showMessageDialog(null,"La suma es: " +c.sum(x, y));
-                                break;
+                       try
+                       {
+                           int x = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el primer numero"));
+                        int y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el segundo numero"));
+                                JOptionPane.showMessageDialog(null,"La suma es: " +c.sum(x, y));    
+                       
+                       }
+                       catch(NumberFormatException e)
+                       {
+                           JOptionPane.showMessageDialog(null,"Los DATOS no estan correctos"+ e.getMessage());
+                       }
+                       
+                             break;
                                 
                    }
                    case "2":{
-                         int x = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el primer numero"));
+                       try
+                       {
+                           int x = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el primer numero"));
                          int y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el segundo numero"));
-                                JOptionPane.showMessageDialog(null,"La resta es: " +c.res(x, y));
+                                JOptionPane.showMessageDialog(null,"La resta es: " +c.res(x, y));   
+                           
+                       }
+                       catch(NumberFormatException e)
+                       {
+                           JOptionPane.showMessageDialog(null, "lOS datos ingresados no son correctos: "+e.getMessage());
+                       }
+                         
                                 break;
                    }
                    case "3":{
-                         int x = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el primer numero"));
-                         int y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el segundo numero"));
+                       try
+                       {
+                            int x = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el primer numero"));
+                            int y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el segundo numero"));
                                 JOptionPane.showMessageDialog(null,"La Multiplicacion es: " +c.mul(x, y));
+                       }
+                       catch(NumberFormatException e)
+                       {
+                           JOptionPane.showMessageDialog(null, "lOS datos ingresados no son correctos: "+e.getMessage());
+                       }
+                         
                                 break;
                    }
                    case "4":{
-                         int x = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el primer numero"));
-                         int y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el segundo numero"));
-                                JOptionPane.showMessageDialog(null,"La Division es: " +c.div(x, y));
-                                break;
-                   }
+
+                        try{
+                             int x = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el primer numero"));
+                            int y = Integer.parseInt(JOptionPane.showInputDialog("Ingrese el segundo numero"));
+                           int resul =  c.div(x, y);
+                           if (resul ==0) 
+                           {
+
+                             JOptionPane.showMessageDialog(null,"No se pudo realizar la Division");
+                           }
+                           else
+                           {
+                              JOptionPane.showMessageDialog(null,"La Division es: " +resul);
+                            }
+
+                           
+                         }catch (NumberFormatException e) {
+                          JOptionPane.showMessageDialog(null,"Ocurrio un erro al procesar la operacion:\n"+e.getMessage());
+                          
+                        }
+                         
+                                
+                        break;
+                   
                }
-               
+
+                   case "cancelar":{
+                      
+                       JOptionPane.showMessageDialog(null,"CERRANDO LA CALCULADORA...\n"); 
+                       
+                       Seguir = false;
+                       
+                   }
+            }
             }
             
         }catch(Exception e){

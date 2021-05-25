@@ -29,6 +29,11 @@ public class RMI extends UnicastRemoteObject implements Claculadora{
         return a * b;
     }
     public int div(int a, int b) throws RemoteException{
+        if (b==0) 
+        {
+            return 0;
+            
+        }
         return a / b;
     }
 }
